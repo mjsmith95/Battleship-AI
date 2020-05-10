@@ -27,8 +27,7 @@ clock = pg.time.Clock()
 """
 to be implemented:
 
-pg.Rect(25, 60, 140, 32)
-pg.draw.rect(screen, color, box, 2)
+
 
 def render_ship(ship_length, ship_cord_vec): 
 
@@ -43,20 +42,19 @@ def place_ship():
     
        
 def render_board(colors, scrn, scrn_h, scrn_w):
-    board_demension = int(scrn_h * .9)
-    print(board_demension)
-    board_location = [(scrn_h - int(scrn_h * 0.96)) ,(scrn_w - int(scrn_w * 0.96))]
-    print(board_location)
-    back_board =  pg.Rect(board_location[0], board_location[0], board_demension, board_demension) 
-    pg.draw.rect(scrn, colors[1], back_board, 0)
     
-    """
-    for x in range(11):
+    board_demension = int(scrn_h * .9)
+    board_location = (scrn_h - int(scrn_h * 0.96))
+    back_board =  pg.Rect(board_location, board_location, board_demension, board_demension) 
+    
+    pg.draw.rect(scrn, colors[1], back_board, 0)
+    board_divison = board_demension/10 
+    for i in range(11):
         #horizontal
-        pg.draw.line(screen,grid_blue,[],[],2)
+        pg.draw.line(scrn, colors[0], [board_location, board_location*i], [], 2)
         #vertical 
-        pg.draw.line(screen,grid_blue,[],[],2)
-     """           
+        pg.draw.line(scrn, colors[0], [], [], 2)
+          
 
 def board_setup():
     ships_placed = False
