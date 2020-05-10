@@ -39,7 +39,8 @@ def place_ship():
 """
     
        
-def render_ship(color,screen):
+def render_board(color,screen, scrn_h, scrn_w):
+    for x in rangwe  
     
 
 
