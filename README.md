@@ -9,5 +9,5 @@ An ongoing quest to create the perfect artificial battleship champion
 2. set tracked files (format is `'*.file-extension'`) ie: `git lfs track '*.db'` 
 3. Push files and pointers via: `git lfs push --all origin master` and then `git push -u origin master` 
 4. Git LFS should now be set up 
-Note if git LFS is already part of a repo, then all you have to do is set one 
+- Note: if git LFS is already part of a repo, then all you have to do is set one 
 
