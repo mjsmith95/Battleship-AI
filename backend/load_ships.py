@@ -10,7 +10,8 @@ def load_carriers():
             carriers.append((h_start, h_start+1, h_start+2, h_start+3, h_start+4))
             carriers.append((v_start, v_start+10, v_start+20, v_start+30, v_start+40))
 
-    return shuffle(carriers)
+    shuffle(carriers)
+    return carriers
 
 
 def load_battleships():
@@ -22,7 +23,8 @@ def load_battleships():
             battleships.append((h_start, h_start+1, h_start+2, h_start+3))
             battleships.append((v_start, v_start+10, v_start+20, v_start+30))
 
-    return shuffle(battleships)
+    shuffle(battleships)
+    return battleships
 
 
 def load_destroyers():
@@ -34,7 +36,8 @@ def load_destroyers():
             destroyers.append((h_start, h_start+1, h_start+2))
             destroyers.append((v_start, v_start+10, v_start+20))
 
-    return shuffle(destroyers)
+    shuffle(destroyers)
+    return destroyers
 
 
 def load_submarines():
@@ -46,7 +49,8 @@ def load_submarines():
             submarines.append((h_start, h_start+1, h_start+2))
             submarines.append((v_start, v_start+10, v_start+20))
 
-    return shuffle(submarines)
+    shuffle(submarines)
+    return submarines
 
 
 def load_patrol_boats():
@@ -58,4 +62,17 @@ def load_patrol_boats():
             patrol_boats.append((h_start, h_start+1))
             patrol_boats.append((v_start, v_start+10))
 
-    return shuffle(patrol_boats)
+    shuffle(patrol_boats)
+    return patrol_boats
+
+
+if __name__ == "__main__":
+    print(load_carriers())
+    print()
+    print(load_battleships())
+    print()
+    print(load_destroyers())
+    print()
+    print(load_submarines())
+    print()
+    print(load_patrol_boats())

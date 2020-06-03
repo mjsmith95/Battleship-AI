@@ -90,9 +90,7 @@ def check_overlap(new_ship, *old_ships):
 
 
 def generate_configurations():
-    x = 0
     start = time()
-
     for carrier in carriers:
         for battleship in battleships:
             if check_overlap(battleship, carrier):
@@ -114,19 +112,17 @@ def generate_configurations():
                                         coordinate in destroyer or \
                                         coordinate in submarine or \
                                         coordinate in patrol_boat:
-                                    x += 1
                                     yield carrier, battleship, destroyer, submarine, patrol_boat
                         else:
-                            x += 1
                             yield carrier, battleship, destroyer, submarine, patrol_boat
 
                         if time() - start > 60:  # stop after # seconds
                             print("timed out")
-                            # print(time() - start)
-                            # print(x)
                             return
 
 
 if __name__ == "__main__":
+    configurations = 0
     for _ in generate_configurations():
-        pass
+        configurations += 1
+    print(configurations)
