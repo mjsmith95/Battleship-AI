@@ -44,11 +44,11 @@ def render_board(colors, scrn, scrn_h, scrn_w):
 
     for i in range(11):
         # horizontal
-        pg.draw.line(scrn, colors[0], [board_location, board_location + (board_division * i)],
-                     [board_location + board_dimension, board_location + (board_division * i)], 2)
+        pg.draw.line(scrn, colors[0], [board_location, int(board_location + (board_division * i))],
+                     [board_location + board_dimension, int(board_location + (board_division * i))], 2)
         # vertical
-        pg.draw.line(scrn, colors[0], [board_location + (board_division * i), board_location],
-                     [board_location + (board_division * i), board_location + board_dimension], 2)
+        pg.draw.line(scrn, colors[0], [int(board_location + (board_division * i)), board_location],
+                     [int(board_location + (board_division * i)), board_location + board_dimension], 2)
 
 
 def build_ship(ship_length, spacing, ship_cords, scrn_h, is_vertical):
@@ -74,7 +74,7 @@ def draw_ship(ship, color, scrn):
         pg.draw.rect(scrn, color, segment)
 
 
-def move_ship(ship, cords, mouse_pos):
+def move_ship(ship, cords):
     for segment in ship:
         segment.x = cords[0]
         segment.y = cords[1]
@@ -110,26 +110,26 @@ def board_setup():
                             offset_y = [0] * len(ship)
                             mouse_x, mouse_y = event.pos
                             for i in range(len(ship)):
-                                print(ship[i].x)
                                 offset_x[i] = (ship[i].x - mouse_x)  # + (ship[0].x - segment.x)))
                                 offset_y[i] = (ship[i].y - mouse_y)  # +(ship[0].y - segment.y)))
-
+                            print("offset len: " + str(len(offset_x)))
             elif event.type == pg.MOUSEBUTTONUP:
                 if event.button == 1:
                     rectangle_dragging = False
 
             elif event.type == pg.MOUSEMOTION:
                 if rectangle_dragging:
-                    print("lsit len " + str(len(offset_x)))
                     for ship in ship_list:
+                        print("list len " + str(len(offset_x)))
+                        print("cur ship size " + str(len(ship)))
                         mouse_x, mouse_y = event.pos
-                        for i in range(len(ship)):
-                            print(ship[i].x)
-                            ship[i].x = mouse_x + offset_x[i]
-                            ship[i].y = mouse_y + offset_y[i]
+                        if len(ship) == len(offset_x):
+                            for i in range(len(ship)):
+                                print(i)
+                                ship[i].x = mouse_x + offset_x[i]
+                                ship[i].y = mouse_y + offset_y[i]
 
         screen.fill((30, 30, 30))
-        pg.draw.rect(screen, hit_red, rectangle)
         render_board(colors, screen, screen_h, screen_w)
         draw_ship(cruiser, floating_ship_grey, screen)
         draw_ship(sub, floating_ship_grey, screen)
