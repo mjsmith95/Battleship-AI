@@ -1,5 +1,5 @@
-import database_manager as db
-
+# import database_manager as db
+import ships_manager as sm
 
 # names of the SQL table containing the ship type
 CARRIER = "carriers"
@@ -11,7 +11,7 @@ PATROL_BOAT = "patrol_boats"
 
 def update_heatmap(configuration, heatmap):
     for ship in configuration:
-        if ship[0] is None:
+        if ship == [()]:
             continue
         for coordinate in ship:
             heatmap[coordinate] += 1
@@ -21,9 +21,9 @@ def log_hit(coordinate):
     heatmap = [0 for _ in range(100)]
     num_configurations = 0
 
-    db.non_sunk_hits.append(coordinate)
+    sm.non_sunk_hits.append(coordinate)
 
-    for configuration in db.generate_configurations():
+    for configuration in sm.generate_configurations():
         update_heatmap(configuration, heatmap)
         num_configurations += 1
 
@@ -34,9 +34,9 @@ def log_miss(coordinate):
     heatmap = [0 for _ in range(100)]
     num_configurations = 0
 
-    db.remove_ship_by_coordinate(coordinate)
+    sm.remove_ship_by_coordinate(coordinate)
 
-    for configuration in db.generate_configurations():
+    for configuration in sm.generate_configurations():
         update_heatmap(configuration, heatmap)
         num_configurations += 1
 
@@ -47,13 +47,13 @@ def log_sunk_ship(ship_type, *coordinates):
     heatmap = [0 for _ in range(100)]
     num_configurations = 0
 
-    db.remove_ship_by_type(ship_type)
+    sm.remove_ship_by_type(ship_type)
     for coordinate in coordinates:
-        if coordinate in db.non_sunk_hits:
-            db.non_sunk_hits.remove(coordinate)
-        db.remove_ship_by_coordinate(coordinate)
+        if coordinate in sm.non_sunk_hits:
+            sm.non_sunk_hits.remove(coordinate)
+        sm.remove_ship_by_coordinate(coordinate)
 
-    for configuration in db.generate_configurations():
+    for configuration in sm.generate_configurations():
         update_heatmap(configuration, heatmap)
         num_configurations += 1
 
