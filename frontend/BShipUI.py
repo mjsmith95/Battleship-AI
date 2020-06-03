@@ -87,10 +87,20 @@ def board_setup():
     fps = 30
     colors = [grid_blue, backboard_color]
 
-    cruiser = build_ship(5, 2, [(screen_h - int(screen_h * 0.96)) + 2, (screen_h - int(screen_h * 0.96)) + 2], screen_h,
+    carrier = build_ship(5, 2, [(screen_h - int(screen_h * 0.96)) + 2, (screen_h - int(screen_h * 0.96)) + 2], screen_h,
                          True)
+
+    battleship = build_ship(4, 2, [(screen_h - int(screen_h * 0.96)) + 2 + int((screen_h * .9) / 10),
+                                   (screen_h - int(screen_h * 0.96)) + 2 + int((screen_h * .9) / 10)], screen_h, True)
+
+    cruiser = build_ship(3, 2, [(screen_h - int(screen_h * 0.96)) + 2 + int((screen_h * .9) / 10),
+                                (screen_h - int(screen_h * 0.96)) + 2 + int((screen_h * .9) / 10)], screen_h, True)
+
     sub = build_ship(3, 2, [(screen_h - int(screen_h * 0.96)) + 2 + int((screen_h * .9) / 10),
                             (screen_h - int(screen_h * 0.96)) + 2 + int((screen_h * .9) / 10)], screen_h, True)
+
+    destroyer = build_ship(2, 2, [(screen_h - int(screen_h * 0.96)) + 2 + int((screen_h * .9) / 10),
+                                  (screen_h - int(screen_h * 0.96)) + 2 + int((screen_h * .9) / 10)], screen_h, True)
 
     ship_list = [cruiser, sub]
     while not ships_placed:
@@ -100,7 +110,7 @@ def board_setup():
                 ships_placed = True
 
             elif event.type == pg.MOUSEBUTTONDOWN:
-                # button == 1 means left click 
+                # button == 1 means left click
                 if event.button == 1:
                     for ship in ship_list:
 
