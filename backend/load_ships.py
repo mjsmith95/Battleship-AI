@@ -1,3 +1,6 @@
+from random import shuffle
+
+
 def load_carriers():
     carriers = []
     for i in range(10):
@@ -7,7 +10,7 @@ def load_carriers():
             carriers.append((h_start, h_start+1, h_start+2, h_start+3, h_start+4))
             carriers.append((v_start, v_start+10, v_start+20, v_start+30, v_start+40))
 
-    return carriers
+    return shuffle(carriers)
 
 
 def load_battleships():
@@ -19,7 +22,7 @@ def load_battleships():
             battleships.append((h_start, h_start+1, h_start+2, h_start+3))
             battleships.append((v_start, v_start+10, v_start+20, v_start+30))
 
-    return battleships
+    return shuffle(battleships)
 
 
 def load_destroyers():
@@ -31,7 +34,7 @@ def load_destroyers():
             destroyers.append((h_start, h_start+1, h_start+2))
             destroyers.append((v_start, v_start+10, v_start+20))
 
-    return destroyers
+    return shuffle(destroyers)
 
 
 def load_submarines():
@@ -43,7 +46,7 @@ def load_submarines():
             submarines.append((h_start, h_start+1, h_start+2))
             submarines.append((v_start, v_start+10, v_start+20))
 
-    return submarines
+    return shuffle(submarines)
 
 
 def load_patrol_boats():
@@ -55,4 +58,4 @@ def load_patrol_boats():
             patrol_boats.append((h_start, h_start+1))
             patrol_boats.append((v_start, v_start+10))
 
-    return patrol_boats
+    return shuffle(patrol_boats)

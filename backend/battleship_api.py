@@ -1,4 +1,3 @@
-# import database_manager as db
 import ships_manager as sm
 
 # names of the SQL table containing the ship type
@@ -70,9 +69,6 @@ def test():
     print(heatmap)
     print(num_configurations)
     print()
-
-    # log_miss(0)
-    # log_hit(55)
 
     heatmap, num_configurations = log_sunk_ship(PATROL_BOAT, 45, 55)
     print(heatmap)
