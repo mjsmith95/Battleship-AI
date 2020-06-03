@@ -117,8 +117,10 @@ def generate_configurations():
                             yield carrier, battleship, destroyer, submarine, patrol_boat
 
                         if time() - start > 60:  # stop after # seconds
-                            print("timed out")
+                            print(f"Timed out: {time() - start} seconds")
                             return
+
+    print(f"Completed in {time() - start} seconds")
 
 
 if __name__ == "__main__":
