@@ -100,6 +100,7 @@ def board_setup():
                 ships_placed = True
 
             elif event.type == pg.MOUSEBUTTONDOWN:
+                # button == 1 means left click 
                 if event.button == 1:
                     for ship in ship_list:
 
