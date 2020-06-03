@@ -98,21 +98,16 @@ def remove_ship_by_type(ship_name):
 def check_overlap(new_ship, *old_ships):
     """Assume all old ships do not overlap. Check each old ship against new ship. If anything overlaps, return True,
     otherwise return False."""
+    if new_ship[0] is None:
+        return False
+
     for ship in old_ships:
+        if ship[0] is None:
+            continue
         for coordinate in ship:
             if coordinate in new_ship:
                 return True
     return False
-
-
-def check_duplicates(permutation):
-    perm_set = set()
-    for coord in permutation:
-        if coord in perm_set:
-            return True
-        elif coord is not None:
-            perm_set.add(coord)
-    return True
 
 
 def generate_configurations():
@@ -124,73 +119,40 @@ def generate_configurations():
         conn = get_connection()
         cur = conn.cursor()
 
-        for permutation in cur.execute(
-                """
-                    SELECT * FROM carriers
-                    CROSS JOIN battleships
-                    CROSS JOIN destroyers
-                    CROSS JOIN submarines
-                    CROSS JOIN patrol_boats;
-                """
-        ):
-            if check_duplicates(permutation):
-                carrier = permutation[:5]
-                battleship = permutation[5:9]
-                destroyer = permutation[9:12]
-                submarine = permutation[12:15]
-                patrol_boat = permutation[15:]
+        for carrier in cur.execute("SELECT * FROM carriers;").fetchall():
+            for battleship in cur.execute("SELECT * FROM battleships;").fetchall():
+                if check_overlap(battleship, carrier):
+                    continue
+                for destroyer in cur.execute("SELECT * FROM destroyers;").fetchall():
+                    if check_overlap(destroyer, carrier, battleship):
+                        continue
+                    for submarine in cur.execute("SELECT * FROM submarines;").fetchall():
+                        if check_overlap(submarine, carrier, battleship, destroyer):
+                            continue
+                        for patrol_boat in cur.execute("SELECT * FROM patrol_boats;").fetchall():
+                            if check_overlap(patrol_boat, carrier, battleship, destroyer, submarine):
+                                continue
 
-                if non_sunk_hits:
-                    for coordinate in non_sunk_hits:
-                        if coordinate in carrier or \
-                                coordinate in battleship or \
-                                coordinate in destroyer or \
-                                coordinate in submarine or \
-                                coordinate in patrol_boat:
-                            x += 1
-                            yield carrier, battleship, destroyer, submarine, patrol_boat
-                else:
-                    x += 1
-                    yield carrier, battleship, destroyer, submarine, patrol_boat
+                            if non_sunk_hits:
+                                for coordinate in non_sunk_hits:
+                                    if coordinate in carrier or \
+                                            coordinate in battleship or \
+                                            coordinate in destroyer or \
+                                            coordinate in submarine or \
+                                            coordinate in patrol_boat:
+                                        x += 1
+                                        yield carrier, battleship, destroyer, submarine, patrol_boat
+                            else:
+                                x += 1
+                                yield carrier, battleship, destroyer, submarine, patrol_boat
 
-                if time() - start > 60:  # stop after a minute
-                    print("timed out")
-                    return
-
-        # for carrier in cur.execute("SELECT * FROM carriers;").fetchall():
-        #     for battleship in cur.execute("SELECT * FROM battleships;").fetchall():
-        #         if check_overlap(battleship, carrier):
-        #             continue
-        #         for destroyer in cur.execute("SELECT * FROM destroyers;").fetchall():
-        #             if check_overlap(destroyer, carrier, battleship):
-        #                 continue
-        #             for submarine in cur.execute("SELECT * FROM submarines;").fetchall():
-        #                 if check_overlap(submarine, carrier, battleship, destroyer):
-        #                     continue
-        #                 for patrol_boat in cur.execute("SELECT * FROM patrol_boats;").fetchall():
-        #                     if check_overlap(patrol_boat, carrier, battleship, destroyer, submarine):
-        #                         continue
-        #
-        #                     if non_sunk_hits:
-        #                         for coordinate in non_sunk_hits:
-        #                             if coordinate in carrier or \
-        #                                     coordinate in battleship or \
-        #                                     coordinate in destroyer or \
-        #                                     coordinate in submarine or \
-        #                                     coordinate in patrol_boat:
-        #                                 x += 1
-        #                                 yield carrier, battleship, destroyer, submarine, patrol_boat
-        #                     else:
-        #                         x += 1
-        #                         yield carrier, battleship, destroyer, submarine, patrol_boat
-        #
-        #                     if time() - start > 60:  # stop after a minute
-        #                         print("timed out")
-        #                         return
+                            if time() - start > 60:  # stop after # seconds
+                                print("timed out")
+                                return
 
     finally:
-        # print(time() - start)
-        # print(x)
+        print(time() - start)
+        print(x)
 
         if conn:
             conn.close()
