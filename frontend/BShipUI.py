@@ -40,56 +40,20 @@ def render_board(colors, scrn, scrn_h, scrn_w):
                      [int(board_location + (board_division * i)), board_location + board_dimension], 2)
 
 
-
-
 def board_setup():
     rectangle = pg.rect.Rect(176, 134, 17, 17)
-    rectangle_dragging = False
-    ships_placed = False
     fps = 30
     colors = [grid_blue, backboard_color]
+    game_over = False
 
-    while not ships_placed:
+    while not game_over:
 
         for event in pg.event.get():
             if event.type == pg.QUIT:
-                ships_placed = True
-
-            elif event.type == pg.MOUSEBUTTONDOWN:
-                # button == 1 means left click
-                if event.button == 1:
-                    for ship in ship_list:
-
-                        if ship[0].collidepoint(event.pos):
-                            print("cur ship size " + str(len(ship)))
-                            rectangle_dragging = True
-                            offset_x = [0] * len(ship)
-                            offset_y = [0] * len(ship)
-                            mouse_x, mouse_y = event.pos
-                            for i in range(len(ship)):
-                                offset_x[i] = (ship[i].x - mouse_x)  # + (ship[0].x - segment.x)))
-                                offset_y[i] = (ship[i].y - mouse_y)  # +(ship[0].y - segment.y)))
-                            print("offset len: " + str(len(offset_x)))
-            elif event.type == pg.MOUSEBUTTONUP:
-                if event.button == 1:
-                    rectangle_dragging = False
-
-            elif event.type == pg.MOUSEMOTION:
-                if rectangle_dragging:
-                    for ship in ship_list:
-                        print("list len " + str(len(offset_x)))
-                        print("cur ship size " + str(len(ship)))
-                        mouse_x, mouse_y = event.pos
-                        if len(ship) == len(offset_x):
-                            for i in range(len(ship)):
-                                print(i)
-                                ship[i].x = mouse_x + offset_x[i]
-                                ship[i].y = mouse_y + offset_y[i]
+                game_over = True
 
         screen.fill((30, 30, 30))
         render_board(colors, screen, screen_h, screen_w)
-        draw_ship(cruiser, floating_ship_grey, screen)
-        draw_ship(sub, floating_ship_grey, screen)
         pg.draw.rect(screen, hit_red, rectangle)
         pg.display.flip()
         clock.tick(fps)
@@ -97,5 +61,8 @@ def board_setup():
 
 if __name__ == '__main__':
     pg.init()
-    board_setup()
-    pg.quit()
+
+    for i in range(0, 10):
+        test = pg.rect.Rect(i*17 + 20, 0, 17, 17)
+        pg.draw.rect(screen, hit_red, test)
+        pg.display.flip()
