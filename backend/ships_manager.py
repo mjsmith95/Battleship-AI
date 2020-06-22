@@ -1,4 +1,5 @@
 from time import time
+from random import shuffle
 from load_ships import *
 
 non_sunk_hits = []
@@ -90,6 +91,12 @@ def check_overlap(new_ship, *old_ships):
 
 
 def generate_configurations():
+    shuffle(carriers)
+    shuffle(battleships)
+    shuffle(destroyers)
+    shuffle(submarines)
+    shuffle(patrol_boats)
+
     start = time()
     for carrier in carriers:
         for battleship in battleships:
