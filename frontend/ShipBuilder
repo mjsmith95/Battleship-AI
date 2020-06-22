@@ -1,0 +1,81 @@
+import pygame as pg
+
+
+# returns a collection of recs, that can be used to render a ship for battleship
+
+def build_ship(ship_length, spacing, ship_cords, scrn_h, is_vertical):
+    box_dimension = int((scrn_h * .9) / 10)
+    print(box_dimension)
+    box_dimension = (box_dimension - spacing)
+    # implement conversion from list cords to screen cords
+    pos = ship_cords
+    ship = []
+    for i in range(ship_length):
+        # draw cubes with segment spacing = line length in board
+        if is_vertical:
+            ship_segment = pg.Rect(pos[0], pos[1] + (box_dimension + spacing) * i, box_dimension, box_dimension)
+        else:
+            ship_segment = pg.Rect((pos[0] + (box_dimension + spacing) * i), pos[1], box_dimension, box_dimension)
+            # add to collection
+        ship.append(ship_segment)
+    return ship
+
+
+# draws ship that was created from build_ship
+
+def draw_ship(ship, color, scrn):
+    for segment in ship:
+        pg.draw.rect(scrn, color, segment)
+
+
+# WIP
+def move_ship(ship, cords):
+    for segment in ship:
+        segment.x = cords[0]
+        segment.y = cords[1]
+
+
+# To be integrated with move ship
+def board_setup():
+    rectangle = pg.rect.Rect(176, 134, 17, 17)
+    rectangle_dragging = False
+    ships_placed = False
+    fps = 30
+    colors = [grid_blue, backboard_color]
+
+    while not ships_placed:
+
+        for event in pg.event.get():
+            if event.type == pg.QUIT:
+                ships_placed = True
+
+            elif event.type == pg.MOUSEBUTTONDOWN:
+                # button == 1 means left click
+                if event.button == 1:
+                    for ship in ship_list:
+
+                        if ship[0].collidepoint(event.pos):
+                            print("cur ship size " + str(len(ship)))
+                            rectangle_dragging = True
+                            offset_x = [0] * len(ship)
+                            offset_y = [0] * len(ship)
+                            mouse_x, mouse_y = event.pos
+                            for i in range(len(ship)):
+                                offset_x[i] = (ship[i].x - mouse_x)  # + (ship[0].x - segment.x)))
+                                offset_y[i] = (ship[i].y - mouse_y)  # +(ship[0].y - segment.y)))
+                            print("offset len: " + str(len(offset_x)))
+            elif event.type == pg.MOUSEBUTTONUP:
+                if event.button == 1:
+                    rectangle_dragging = False
+
+            elif event.type == pg.MOUSEMOTION:
+                if rectangle_dragging:
+                    for ship in ship_list:
+                        print("list len " + str(len(offset_x)))
+                        print("cur ship size " + str(len(ship)))
+                        mouse_x, mouse_y = event.pos
+                        if len(ship) == len(offset_x):
+                            for i in range(len(ship)):
+                                print(i)
+                                ship[i].x = mouse_x + offset_x[i]
+                                ship[i].y = mouse_y + offset_y[i]
