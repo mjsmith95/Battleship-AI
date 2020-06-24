@@ -40,10 +40,38 @@ pygame.display.set_caption("Array Backed Grid")
 # Loop until the user clicks the close button.
 done = False
 
+
+def draw_grid(_grid):
+    grid_recs = []
+    for _row in range(10):
+        grid_recs.append([])
+        for _column in range(10):
+            _color = WHITE
+            if _grid[_row][_column] == 1:
+                _color = GREEN
+            elif _grid[_row][_column] == 2:
+                _color = RED
+            grid_recs[_row].append(pygame.Rect([(MARGIN + WIDTH) * _column + MARGIN,
+                                                    (MARGIN + HEIGHT) * _row + MARGIN,
+                                                    WIDTH,
+                                                    HEIGHT]))
+
+            pygame.draw.rect(screen,
+                             _color,
+                             pygame.Rect([(MARGIN + WIDTH) * _column + MARGIN,
+                                          (MARGIN + HEIGHT) * _row + MARGIN,
+                                          WIDTH,
+                                          HEIGHT]))
+    return grid_recs
+
+
 # Used to manage how fast the screen updates
 clock = pygame.time.Clock()
 if __name__ == "__main__":
     # -------- Main Program Loop -----------
+    is_hover = False
+    recs_list = draw_grid(grid)
+
     while not done:
         for event in pygame.event.get():  # User did something
             if event.type == pygame.QUIT:  # If user clicked close
@@ -57,12 +85,25 @@ if __name__ == "__main__":
                 # Set that location to one
                 grid[row][column] = 1
                 print("Click ", pos, "Grid coordinates: ", row, column)
+            for rec in recs_list:
+                if rec.get_rect().collidepoint(pygame.mouse.get_pos()):
+                    column = pos[0] // (WIDTH + MARGIN)
+                    row = pos[1] // (HEIGHT + MARGIN)
+                    # Set that location to one
+                    grid[row][column] = 2
+                else:
+                    column = pos[0] // (WIDTH + MARGIN)
+                    row = pos[1] // (HEIGHT + MARGIN)
+                    # Set that location to one
+                    grid[row][column] = 0
+                recs_list = draw_grid()
 
-        # Set the screen background
+                    # Set the screen background
         screen.fill(BLACK)
 
         # Draw the grid
-        for row in range(10):
+        recs_list = draw_grid(grid)
+        """for row in range(10):
             for column in range(10):
                 color = WHITE
                 if grid[row][column] == 1:
@@ -72,7 +113,7 @@ if __name__ == "__main__":
                                  [(MARGIN + WIDTH) * column + MARGIN,
                                   (MARGIN + HEIGHT) * row + MARGIN,
                                   WIDTH,
-                                  HEIGHT])
+                                  HEIGHT])"""
 
         # Limit to 60 frames per second
         clock.tick(60)
